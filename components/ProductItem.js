@@ -1,7 +1,24 @@
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
+import { Store } from "../utils/store";
+import toast from "react-hot-toast";
 
 const ProductItem = ({ product }) => {
+  const { state, dispatch } = useContext(Store);
+
+  const addToCartHandler = (item) => {
+    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+
+    if (product.countInStock < quantity) {
+      toast.error("Sorry, product has reached stock limit");
+      return;
+    }
+
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
+    toast.success(`Added ${product.name} to cart`);
+  };
+
   return (
     <div className="card">
       <Link href={`/product/${product.slug}`}>
@@ -21,7 +38,11 @@ const ProductItem = ({ product }) => {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p className="">${product.price}</p>
-        <button className="primary-button" type="button">
+        <button
+          className="primary-button"
+          type="button"
+          onClick={addToCartHandler}
+        >
           Add to Cart
         </button>
       </div>
