@@ -4,7 +4,15 @@ in app:
 npm i -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
+react-hook-form
+js-cookie
+
+
 change .eslintrc.json as follows:
 {
 "extends": ["eslint:recommended", "next/core-web-vitals"]
 }
+
+For hydrating problem, use dynamic rendering on client, set SSR to false
+
+
