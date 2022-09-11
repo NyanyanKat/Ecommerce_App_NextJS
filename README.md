@@ -6,7 +6,7 @@ npx tailwindcss init -p
 
 react-hook-form
 js-cookie
-
+next-auth
 
 change .eslintrc.json as follows:
 {
