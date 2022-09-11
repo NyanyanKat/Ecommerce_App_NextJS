@@ -37,7 +37,7 @@ const ProductItem = ({ product }) => {
           </a>
         </Link>
         <p className="mb-2">{product.brand}</p>
-        <p className="">${product.price}</p>
+        <b className="font-semibold">${product.price}</b>
         <button
           className="primary-button"
           type="button"
