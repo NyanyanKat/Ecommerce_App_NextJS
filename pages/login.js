@@ -91,7 +91,7 @@ export default function LoginScreen() {
         <div className="mb-4">
           Don't have an account?&nbsp;
           <Link href="register">
-            <b className="font-semibold cursor-pointer">Register</b>
+            <a className="cursor-pointer">Register</a>
           </Link>
         </div>
       </form>

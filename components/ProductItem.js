@@ -26,7 +26,7 @@ const ProductItem = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
-            className="rounded shadow"
+            className="rounded shadow hover:rotate-6 object-cover ease-in-out duration-500"
           />
         </a>
       </Link>

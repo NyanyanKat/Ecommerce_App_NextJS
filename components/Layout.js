@@ -3,8 +3,12 @@ import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { Store } from "../utils/store";
 import { ToastContainer } from "react-toastify";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import "react-toastify/dist/ReactToastify.css";
+import { ShoppingCartIcon } from "@heroicons/react/outline";
+import { Menu } from "@headlessui/react";
+import DropdownLink from "./DropdownLink";
+import Cookies from "js-cookie";
 
 const Layout = ({ title, children }) => {
   const { status, data: session } = useSession();
@@ -16,6 +20,12 @@ const Layout = ({ title, children }) => {
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
   }, [cart.cartItems]);
+
+  const logoutClickHandler = () => {
+    Cookies.remove("cart");
+    dispatch({ type: "CART_RESET" });
+    signOut({ callbackUrl: "/login" });
+  };
 
   return (
     <>
@@ -33,29 +43,61 @@ const Layout = ({ title, children }) => {
             <Link href="/">
               <a className="text-lg font-bold">Ecommerce</a>
             </Link>
-            <div className="">
-              <Link href="/cart">
-                <a className="p-2 font-semibold">
-                  Cart
+            <div className="flex">
+              <div className="p-2">
+                {" "}
+                {status === "loading" ? (
+                  "Loading"
+                ) : session?.user ? (
+                  <Menu as="div" className="relative inline-block">
+                    <Menu.Button className="text-blue-800 text-bold">
+                      Welcome, {session.user.name}
+                    </Menu.Button>
+                    <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg bg-gray-100">
+                      <Menu.Item>
+                        <DropdownLink className="dropdown-link" href="/profile">
+                          Profile
+                        </DropdownLink>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <DropdownLink
+                          className="dropdown-link"
+                          href="/order-history"
+                        >
+                          Order History
+                        </DropdownLink>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <DropdownLink
+                          className="dropdown-link"
+                          href="#"
+                          onClick={logoutClickHandler}
+                        >
+                          Logout
+                        </DropdownLink>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Menu>
+                ) : (
+                  <Link href="/login">
+                    <a className="p-2 font-semibold">Login </a>
+                  </Link>
+                )}
+              </div>
+
+              <div className="p-2 cursor-pointer flex">
+                <Link href="/cart">
+                  {/* <a className="p-2 font-semibold"> */}
+                  <ShoppingCartIcon className="h-7 w-7" />
+                </Link>
+                <div className="">
                   {cartItemsCount > 0 && (
-                    <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                    <span className="object-cover rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
                       {cartItemsCount}
                     </span>
                   )}
-                </a>
-              </Link>
-
-              {status === "loading" ? (
-                "Loading"
-              ) : session?.user ? (
-                <a className="p-2 font-semibold">
-                  Welcome, {session.user.name}
-                </a>
-              ) : (
-                <Link href="/login">
-                  <a className="p-2 font-semibold">Login </a>
-                </Link>
-              )}
+                </div>
+              </div>
             </div>
           </nav>
         </header>
