@@ -4,10 +4,12 @@ in app:
 npm i -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
+heroicons
 react-hook-form
 js-cookie
 next-auth
-headless ui
+react-toatify
+headless UI MENU dropdown
 
 change .eslintrc.json as follows:
 {
@@ -15,5 +17,3 @@ change .eslintrc.json as follows:
 }
 
 For hydrating problem, use dynamic rendering on client, set SSR to false
-
-
