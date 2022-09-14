@@ -17,3 +17,5 @@ change .eslintrc.json as follows:
 }
 
 For hydrating problem, use dynamic rendering on client, set SSR to false
+
+ADD jsconfig.json for autoimport
