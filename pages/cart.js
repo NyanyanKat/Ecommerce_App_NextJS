@@ -1,11 +1,13 @@
-import Image from "next/image";
-import Link from "next/link";
-import React, { useContext } from "react";
-import Layout from "../components/Layout";
-import { Store } from "../utils/store";
-import { XCircleIcon } from "@heroicons/react/outline";
-import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useContext } from 'react';
+import Layout from '../components/Layout';
+import { Store } from '../utils/store';
+import { XCircleIcon } from '@heroicons/react/outline';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function CartScreen() {
   const router = useRouter();
@@ -16,12 +18,17 @@ function CartScreen() {
   } = state;
 
   const removeItemHandler = (item) => {
-    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
   };
 
-  const updateCartHanlder = (item, qty) => {
+  const updateCartHanlder = async (item, qty) => {
     const quantity = Number(qty);
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.countInStock < quantity) {
+      return toast.error(`Sorry, ${item.name} has reached stock limit`);
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+    toast.success(`${item.name} has been updated in the cart`);
   };
 
   return (
@@ -29,7 +36,7 @@ function CartScreen() {
       <h1 className="mb-4 text-xl font-bold">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <div className="">
-          Cart is Empty.{" "}
+          Cart is Empty.{' '}
           <Link href="/">
             <b className="cursor-pointer font-semibold">Go Shopping</b>
           </Link>
@@ -77,7 +84,9 @@ function CartScreen() {
                         ))}
                       </select>
                     </td>
-                    <td className="p-5 text-right">${item.price}</td>
+                    <td className="p-5 text-right font-semibold">
+                      ${item.price}
+                    </td>
                     <td className="p-5 text-center">
                       <button onClick={() => removeItemHandler(item)}>
                         <XCircleIcon className="h-5 w-5"></XCircleIcon>
@@ -91,7 +100,7 @@ function CartScreen() {
           <div className="card p-5">
             <ul>
               <li>
-                <div className="pb-3 text-xl">
+                <div className="pb-3 text-xl font-semibold">
                   Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) : $
                   {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
                 </div>
@@ -99,7 +108,7 @@ function CartScreen() {
               <li>
                 <button
                   className="primary-button w-full"
-                  onClick={() => router.push("login?redirect=/shipping")}
+                  onClick={() => router.push('login?redirect=/shipping')}
                 >
                   Check Out
                 </button>

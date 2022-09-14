@@ -1,23 +1,23 @@
-import Link from "next/link";
-import React, { useContext } from "react";
-import { Store } from "../utils/store";
-import toast from "react-hot-toast";
+import Link from 'next/link';
+// import React, { useContext } from 'react';
+// import { Store } from '../utils/store';
+// import toast from 'react-hot-toast';
 
-const ProductItem = ({ product }) => {
-  const { state, dispatch } = useContext(Store);
+const ProductItem = ({ product, addToCartHandler }) => {
+  // const { state, dispatch } = useContext(Store);
 
-  const addToCartHandler = (item) => {
-    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
+  // const addToCartHandler = (item) => {
+  //   const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+  //   const quantity = existItem ? existItem.quantity + 1 : 1;
 
-    if (product.countInStock < quantity) {
-      toast.error("Sorry, product has reached stock limit");
-      return;
-    }
+  //   if (product.countInStock < quantity) {
+  //     toast.error('Sorry, product has reached stock limit');
+  //     return;
+  //   }
 
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
-    toast.success(`Added ${product.name} to cart`);
-  };
+  //   dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+  //   toast.success(`Added ${product.name} to cart`);
+  // };
 
   return (
     <div className="card">
@@ -41,7 +41,7 @@ const ProductItem = ({ product }) => {
         <button
           className="primary-button"
           type="button"
-          onClick={addToCartHandler}
+          onClick={() => addToCartHandler(product)}
         >
           Add to Cart
         </button>

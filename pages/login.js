@@ -1,11 +1,16 @@
-import Link from "next/link";
-import React, { useEffect } from "react";
-import Layout from "../components/Layout";
-import { useForm } from "react-hook-form";
-import { signIn, useSession } from "next-auth/react";
-import { getError } from "../utils/error";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+// @ts-ignore
+import Link from 'next/link';
+import React, { useEffect } from 'react';
+import Layout from '../components/Layout';
+// @ts-ignore
+import { useForm } from 'react-hook-form';
+// @ts-ignore
+import { signIn, useSession } from 'next-auth/react';
+import { getError } from '../utils/error';
+// @ts-ignore
+import { toast } from 'react-toastify';
+// @ts-ignore
+import { useRouter } from 'next/router';
 
 export default function LoginScreen() {
   const { data: session } = useSession();
@@ -15,7 +20,7 @@ export default function LoginScreen() {
 
   useEffect(() => {
     if (session?.user) {
-      router.push(redirect || "/");
+      router.push(redirect || '/');
     }
   }, [router, session, redirect]);
 
@@ -27,7 +32,7 @@ export default function LoginScreen() {
 
   const submitHandler = async ({ email, password }) => {
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
@@ -54,11 +59,11 @@ export default function LoginScreen() {
             className="w-full"
             id="email"
             autoFocus
-            {...register("email", {
-              required: "Please enter email",
+            {...register('email', {
+              required: 'Please enter email',
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
-                message: "Please enter valid email",
+                message: 'Please enter valid email',
               },
             })}
           />
@@ -73,11 +78,11 @@ export default function LoginScreen() {
             className="w-full"
             id="password"
             autoFocus
-            {...register("password", {
-              required: "Please enter password",
+            {...register('password', {
+              required: 'Please enter password',
               minLength: {
                 value: 6,
-                message: "Password must be more than 5 characters",
+                message: 'Password must be more than 5 characters',
               },
             })}
           />
